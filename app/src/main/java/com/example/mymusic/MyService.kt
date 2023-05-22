@@ -81,6 +81,7 @@ class MyService: Service() {
     }
 
     private fun playMedia() {
+        if (mediaPlayer == null) createMedia()
         mediaPlayer?.run {
             if (!isPlaying){
                 seekTo(0)
@@ -88,19 +89,7 @@ class MyService: Service() {
             }
             return
         }
-        mediaPlayer = MediaPlayer.create(
-            this,
-            R.raw.aloha,
-        ).apply {
-            isLooping = true
-            setAudioAttributes(
-                AudioAttributes
-                    .Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                    .build()
-            )
-        }
+            createMedia()
     }
     private fun startForeGroundInternal(){
         createNotificationChannel()
@@ -135,6 +124,21 @@ class MyService: Service() {
         //register the channel with the system
         val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
+    }
+    fun createMedia(){
+        mediaPlayer = MediaPlayer.create(
+            this,
+            R.raw.aloha,
+        ).apply {
+            isLooping = true
+            setAudioAttributes(
+                AudioAttributes
+                    .Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .build()
+            )
+        }
     }
 
     override fun onDestroy() {

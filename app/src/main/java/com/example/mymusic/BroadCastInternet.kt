@@ -26,7 +26,6 @@ class BroadCastInternet : BroadcastReceiver() {
         val serviceIntent = Intent(context, MyService::class.java)
         serviceIntent.putExtra("STOP_AUDIO", true)
         context?.stopService(serviceIntent)
-        context?.startService(serviceIntent)
     }
 
 }
